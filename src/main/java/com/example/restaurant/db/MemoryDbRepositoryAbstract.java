@@ -21,8 +21,8 @@ abstract public class MemoryDbRepositoryAbstract<T extends MemoryDbEntity> imple
     @Override
     public T save(T entity) {
         var optionalEntity = db.stream().filter(it -> it.getIndex() == entity.getIndex()).findFirst();
-                        // entity.getIndex()를 가지고 db에서 첫번째부터 쭉 돌다가 동일한게 있으면
-                        // 이미 있는 데이터가 return이 된다. -> else 문으로 그럼 기존의 인덱스를 꺼내서 새로운 entity에다 셋팅한다
+                        // entity.getIndex()를 가지고 db에서 첫번째부터 쭉 돌다가
+                        // 동일한게 있으면 이미 있는 데이터가 return이 된다. -> else 문으로 그럼 기존의 인덱스를 꺼내서 새로운 entity에다 셋팅한다
                         // 기존데이터 지우고 새로운 entity를 저장한다.
         if(optionalEntity.isEmpty()){ // db에 데이터가 없는 경우
             index++;
