@@ -26,7 +26,7 @@ public class WishListSevice {
         var searchLocalRes = naverClient.searchLocal(searchLocalReq);
 
         // 결과가 있을 수도 없을 수도 있기 때문에 조건문
-        if (searchLocalRes.getTotal() > 0){
+        if (searchLocalRes.getTotal() > 0){ // 결과가 있다면
             var localItem = searchLocalRes.getItems().stream().findFirst().get();    // 첫번째 아이템을 꺼낸다
 
             var imageQuery = localItem.getTitle().replaceAll("<[^>]*>","");
@@ -92,10 +92,25 @@ public class WishListSevice {
     }
 
     public List<WishListDto> findAll() {
-        return wishListRepository.listAll()
+        return wishListRepository.findAll()
                 .stream()
                 .map(it -> entityToDto(it))
                 .collect(Collectors.toList());
         // map을 통해서 entity르 dto로 다 바꿔준다
+    }
+
+    public void delete(int index) {
+        wishListRepository.deleteById(index);
+    }
+
+    public void addVisit(int index){
+        var wishItem = wishListRepository.finById(index);
+
+        // 방문할 떄 마다 한번씩 추가
+        if (wishItem.isPresent()){
+            var item = wishItem.get();
+            item.setVisit(true);
+            item.setVisitCount(item.getVisitCount()+1);
+        }
     }
 }
